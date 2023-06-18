@@ -9,6 +9,7 @@ import {
   orderBy,
   limit,
   QuerySnapshot,
+  getDocs,
 } from "firebase/firestore";
 import MessageBubble from "../components/chat/MessageBubble.jsx";
 import BackToHome from "../components/button/navigate_button/BackToHome.jsx";
@@ -23,6 +24,7 @@ const Chat = () => {
     createdAt: serverTimestamp(),
     userId: auth?.currentUser?.uid,
   };
+console.log(currentMessage)
   const sendMessage = async (e) => {
     e.preventDefault();
     if (currentMessage.trim() === "") {
@@ -31,17 +33,19 @@ const Chat = () => {
     }
     try {
       await addDoc(messageCollection, messageData);
+      setCurrentMessage("");
     } catch (error) {
       console.log(error.message);
     }
-    setCurrentMessage("");
   };
   const handleGetMessages = async () => {
     try {
       const res = await getDocs(messageCollection);
       const mapRes = res.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setReceivedMessages(mapRes);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message)
+    }
   };
   useEffect(() => {
     handleGetMessages();
@@ -79,6 +83,7 @@ const Chat = () => {
                     <div className="relative w-full">
                       <input
                         type="text"
+                        value={currentMessage || ''}
                         className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                         onChange={(e) => setCurrentMessage(e.target.value)}
                       />

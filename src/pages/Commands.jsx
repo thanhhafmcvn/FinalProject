@@ -56,11 +56,6 @@ const Commands = () => {
                 </ul>
               </li>
             </ul>
-            <li className="navbar-nav nav-item">
-              <a href="" className="btn btn-outline-info">
-                Login
-              </a>
-            </li>
           </div>
         </div>
       </div>
